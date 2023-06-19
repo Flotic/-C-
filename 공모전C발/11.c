@@ -9,7 +9,7 @@
 /* -------------------------------------- 열거형 ---------------------------------------------- */
 
 //인물 관련 열거형
-typedef enum _job { BAEKSU, LORD, KNIGHT, ADMIN, PRIEST, DOCTOR, BANKER, MERCH } jobType; //직업 기본상태=NONE
+typedef enum _job { BAEKSU, ADMIN, PRIEST, DOCTOR, BANKER, MERCH } jobType; //직업 기본상태=NONE
 typedef enum _estate { COMMONS, NOBILITY } estate; //신분
 typedef enum _scholarship { BABO, THEOLOGY, LAW, MEDICINE } scholarship; //학문 기본상태=NONE
 
@@ -121,7 +121,7 @@ void scholarSelect(scholarship* scholar,jobType* job) //학문 정하기
 	while (true)
 	{
 		printf("1.신학, 2.법학, 3.의학\n");
-		printf("학문을 선택해주세요 : ");//BAEKSU, LORD, KNIGHT, ADMIN, PRIEST, DOCTOR, BANKER, MERCH
+		printf("학문을 선택해주세요 : ");//BAEKSU, ADMIN, PRIEST, DOCTOR, BANKER, MERCH
 		scanf("%d", &select);
 
 		switch (select) //BABO = 0, THEOLOGY = 1, LAW = 2, MEDICINE = 3
@@ -203,11 +203,11 @@ void build(city* city, int cityindex,int* money, int* honor)//아아 ㅇㅋ
 					switch(buildSelect)
 					{
 					case 1:
-						printf("대학교를 지을려면 2000G가 필요합니다. 지으시겠습니까? (Y/N)");
+						printf("대학교를 지을려면 1000G가 필요합니다. 지으시겠습니까? (Y/N)");
 						scanf(" %c", select);
 						if (select == 'Y')
 						{
-							if (*money > 2000)
+							if (*money > 1000)
 							{
 								city[cityindex].building[buildSelect] = 1;
 								*honor += 1;
@@ -225,11 +225,11 @@ void build(city* city, int cityindex,int* money, int* honor)//아아 ㅇㅋ
 							continue;
 						}
 					case 2:
-						printf("은행을 지을려면 3000G가 필요합니다. 지으시겠습니까? (Y/N)");
+						printf("은행을 지을려면 1500G가 필요합니다. 지으시겠습니까? (Y/N)");
 						scanf(" %c", select);
 						if (select == 'Y')
 						{
-							if (*money > 3000)
+							if (*money > 1500)
 							{
 								city[cityindex].building[buildSelect] = 1;
 								*honor += 1;
@@ -247,11 +247,11 @@ void build(city* city, int cityindex,int* money, int* honor)//아아 ㅇㅋ
 							continue;
 						}
 					case 3:
-						printf("성당을 지을려면 4000G가 필요합니다. 지으시겠습니까? (Y/N)");
+						printf("성당을 지을려면 2000G가 필요합니다. 지으시겠습니까? (Y/N)");
 						scanf(" %c", select);
 						if (select == 'Y')
 						{
-							if (*money > 4000)
+							if (*money > 2000)
 							{
 								city[cityindex].building[buildSelect] = 1;
 								*honor += 2;
@@ -269,11 +269,11 @@ void build(city* city, int cityindex,int* money, int* honor)//아아 ㅇㅋ
 							continue;
 						}
 					case 4:
-						printf("미술관을 지을려면 2000G가 필요합니다. 지으시겠습니까? (Y/N)");
+						printf("미술관을 지을려면 1500G가 필요합니다. 지으시겠습니까? (Y/N)");
 						scanf(" %c", select);
 						if (select == 'Y')
 						{
-							if (*money > 3000)
+							if (*money > 1500)
 							{
 								city[cityindex].building[buildSelect] = 1;
 								*honor += 2;
@@ -332,16 +332,19 @@ void movePeople(int* cityMove)
 }*/
 
 //인물조사.
-void searching(int* searchCity, person* newFace)
+void searching(int searchCity, person* newFace)
 {
 	person newPerson;
 	int random;
 	char select;
+	char nameList[5][20] = {"Alessandro","Aurora","Marco","Sofia","Lorenzo"};
 
-	printf("%d번 도시에서 새로운 인물을 찾았습니다!", *searchCity);
+	printf("%d번 도시에서 새로운 인물을 찾았습니다!\n", searchCity);
 
-
-	//printf("이름: %s\n", newPerson.name);
+	srand((unsigned int)time(NULL));
+	random = rand() % 5;
+	strcpy(newPerson.name, nameList[random]);
+	printf("이름: %s\n", newPerson.name);
 
 	srand((unsigned int)time(NULL));
 	newPerson.age = rand() % 9 + 20;
@@ -386,7 +389,8 @@ void searching(int* searchCity, person* newFace)
 		printf("은행가\n");
 		break;
 
-	case 5://바로 고를 수 있는 직업
+	case 5:
+		newPerson.job = MERCH;
 
 		printf("상인\n");
 		break;
@@ -397,25 +401,21 @@ void searching(int* searchCity, person* newFace)
 
 
 	srand((unsigned int)time(NULL));
-	random = rand() % 2;
+	random = rand() % 100;
 	printf("신분: ");
-	switch (random)
+	if(random<3)
 	{
-	case 0:
 		newPerson.status = COMMONS;
 
 		printf("평민\n");
-		break;
-	case 1:
+	}
+	else
+	{
 		newPerson.status = NOBILITY;
 
 		printf("귀족\n");
-		break;
-	default:
-		printf("님들 여기 오류남!!\n");
 	}
-
-
+	
 	srand((unsigned int)time(NULL));
 	random = rand() % 4;
 	printf("학문: ");
@@ -450,23 +450,27 @@ void searching(int* searchCity, person* newFace)
 	}
 	else newPerson.maxExp = 0;
 
-	newPerson.city = *searchCity;
+	newPerson.city = searchCity;
 	newPerson.work = 0;
 	newPerson.AP = 1;
 
 	*newFace = newPerson;
-	printf("조사한 인물 정보가 추가되었습니다.\n");
+	printf("조사한 인물 정보가 추가되었습니다.\n\n");
 	return;
 }
 
 //가문 인물 목록 기능
-void showPersonList(person* person, int maxPerson, char firstName[10])
+void showPersonList(person* person, int maxPerson, char firstName[10], int searchCheck)
 {
 	for (int index = 0; index < maxPerson; index++)
 	{
 		if (person[index].name != '\0')
 		{
-			printf("%d. %s %s\n", index + 1, firstName, person[index].name); // 0이 아니고 1부터 번호 매겨서 인물 출력하고 나중에 입력 받을때 -1 하기
+			if(searchCheck == 0)
+				printf("%d. %s %s\n", index + 1, firstName, person[index].name); // 0이 아니고 1부터 번호 매겨서 인물 출력하고 나중에 입력 받을때 -1 하기
+			else
+				printf("%d. %s\n", index + 1, person[index].name);
+			
 			printf("나이: %d\n", person[index].age);
 			printf("성별: %c\n", person[index].gender == 1 ? 'M' : 'F');
 			printf("AP: %d\n", person[index].AP);
@@ -477,12 +481,6 @@ void showPersonList(person* person, int maxPerson, char firstName[10])
 			{
 			case BAEKSU://18세미만 또는 대학을 감 
 				printf("무직\n");
-				break;
-			case LORD://귀족직업
-				printf("영주\n");
-				break;
-			case KNIGHT://귀족직업
-				printf("기사\n");
 				break;
 			case ADMIN://학문 직업. 법학
 				printf("행정관\n");
@@ -537,8 +535,37 @@ void showPersonList(person* person, int maxPerson, char firstName[10])
 				printf("여기 오류남 ㅋㅋㅋㅋ\n");
 			}
 
+			if(person[index].city != 0 && searchCheck == 0)
+			{
+				printf("현재 %d번 도시에 위치해 있습니다.\n", person[index].city);
+			}
+			else
+			{
+				printf("현재 도시에 발령되지 않은 인물입니다.\n");
+			}
 
-			if (person[index].scholar != BABO)
+			if(searchCheck == 0)
+			{
+				switch(person[index].work)//현재 하는 활동. 0. 명령 대기 1. 도시조사 2. 돈벌기 3. 학문쌓기(대학교가 있을 때만)
+				{
+					case 1:
+						printf("도시를 조사하고 있습니다.\n");
+						break;
+					case 2:
+						printf("돈을 버는 중입니다.\n");
+						break;
+					case 3:
+						printf("대학교에서 공부하는 중입니다.\n");
+						break;
+					case 0:
+						printf("명령을 기다리는 중입니다.\n");
+						break;
+					default:
+						break;
+				}
+			}
+
+			if (person[index].scholar != BABO && searchCheck == 0)
 			{
 				if (person[index].scholarExp != person[index].maxExp)
 					printf("학문을 더 습득할 필요가 있습니다.\n");
@@ -549,7 +576,6 @@ void showPersonList(person* person, int maxPerson, char firstName[10])
 	return;
 }
 
-//이거 학문명으로 바까줘 => 직업결정으로 넘어가요
 
 void printMap(int year, int money, int honor)
 {
@@ -557,60 +583,106 @@ void printMap(int year, int money, int honor)
 	printf("==================================================================================================== \n");
 	printf("                    /                               _______ /        \n");
 	printf("1.런던(항)         /                ---------------                  \n");
-	printf("--------  /-------＼ ____________ /  2.브뤼헤(항)_______\n");
-	printf("         /    ------------------    /                 _ 4.바젤     \n");
-	printf("_______ /   /                      /              ___/             \n");
-	printf("-----------                3.파리__________    __/    ^^^^^^^^^^^^^^ \n");
-	printf("                           ＼             5.제네바    ^^^^^^^^^^^^^ \n");
-	printf("                             ＼             _|_   ^^^^^^^^^   ________ \n");
-	printf("                            6.리옹         |   ＼     ^^^^^  /   _____＼__ \n");
-	printf("                              ^^^^^^^^^^^ /     |         __/ __/    9.베네치아(항) \n");
-	printf("                      ^^^^^^^^^^ ________/      ＼ ____ /  __/        |        ＼ \n");
-	printf("             ^^^^^^^^^^^^   ___/               10.밀라노  /           |          ＼ \n");
-	printf("              ^^^^^^^^^   /                      /       /           /             ＼ \n");
-	printf("^^                7.제노바(항)__________________|        ＼         /                | \n");
-	printf("^^^^^^            /           ＼                ＼11.피렌체＼      /                  ＼ \n");
-	printf("   ^^^^^^^^    /                ＼           _____/          |    /                     |   \n");
-	printf("             -                    ＼   12.피사               |   ＼                     |   \n");
-	printf("           /                        ＼       |               13.안코나(항)              | \n");
-	printf("   8.바르셀로나(항)                   ＼     |              /  ＼   ＼_                  ＼ \n");
-	printf("    /                                   ＼   14.로마______ /    ＼     ＼_                | \n");
-	printf("----                                      ＼ ___     ＼            ＼       ＼_           / \n");
-	printf("                                                 ＼    ＼            ＼         ＼       / \n");
-	printf("                                                   ＼    ＼            ＼         ＼     ＼  \n");
-	printf("                                         ＼ ________ 15.나폴리(항)       ＼         |      ＼ \n");
-	printf("                                                   / /          / ＼       |        |        ＼ \n");
-	printf("                                                  / /__________/    ＼_____|                   ＼ \n");
+	printf("------------------                /  2.브뤼헤(항)\033[33m_______\n\033[0m");
+	printf("              ------------------    \033[33m/                 _ \033[0m4.바젤     \n\033[0m");
+	printf("            /                      \033[33m/              ___/             \n\033[0m");
+	printf("-----------                3.파리\033[33m__________    __/    \033[32m^^^^^^^^^^^^^^ \n\033[0m");
+	printf("                           \033[33m＼             \033[0m5.제네바    \033[32m^^^^^^^^^^^^^ \n\033[0m");
+	printf("                             \033[33m＼             _|_   \033[32m^^^^^^^^^   \033[33m________ \n\033[0m");
+	printf("                            6.리옹         \033[33m|   ＼     \033[32m^^^^^  \033[33m/   \033[0m_____\033[33m＼\033[0m__ \n\033[0m");
+	printf("                              \033[32m^^^^^^^^^^^ \033[33m/     |         __/ \033[0m__/    9.베네치아(항) \n\033[0m");
+	printf("                      \033[32m^^^^^^^^^^ \033[33m________/      ＼ ____ /  \033[0m__/                 ＼ \n\033[0m");
+	printf("             \033[32m^^^^^^^^^^^^   \033[33m___/               \033[0m10.밀라노  /                      ＼ \n\033[0m");
+	printf("              \033[32m^^^^^^^^^   \033[33m/                      /       \033[0m/                         ＼ \n\033[0m");
+	printf("\033[32m^^                \033[0m7.제노바(항)\033[33m__________________|        \033[0m＼                          | \n\033[0m");
+	printf("\033[32m^^^^^^            \033[0m/           ＼                \033[33m＼\033[0m11.피렌체＼                         ＼ \n\033[0m");
+	printf("   \033[32m^^^^^^^^    \033[0m/                ＼           \033[33m_____/     |    \033[0m|                          |   \n\033[0m");
+	printf("             -                    ＼   12.피사          \033[33m|    \033[0m|                          |   \n");
+	printf("           /                        ＼       \033[33m|           ----\033[0m13.안코나(항)              | \n");
+	printf("   8.바르셀로나(항)                   ＼     \033[33m|              /  \033[0m＼                        ＼ \n");
+	printf("    /                                   ＼   14.로마\033[33m______ /    \033[0m ＼                        | \n");
+	printf("----                                      ＼ ___     \033[33m＼            \033[0m＼                     / \n");
+	printf("                                                 ＼    \033[33m＼            \033[0m＼                  / \n");
+	printf("                                                   ＼    \033[33m＼            \033[0m＼                ＼  \n");
+	printf("                                                      15.나폴리(항)       ＼               ＼ \n");
+	printf("                                                     /          / ＼       |                 ＼ \n");
+	printf("                                                    /__________/    ＼_____|                   ＼ \n");
 	printf("==================================================================================================== \n");
 	return;
 }
 
-int revenue(jobType* job)
+int revenue(jobType job,estate nobility)//NOBILITY
 {
 	int random;
 	srand((unsigned int)time(NULL));
-
-	switch (*job)
+	
+	switch (job) //BAEKSU, ADMIN, PRIEST, DOCTOR, BANKER, MERCH
 	{
 	case BAEKSU:
 		random = rand() % 10 / 10 * 10 + 50;
+		if (nobility == 1)
+		{
+			random * 2;
+		}
 		printf("구걸로 %dG를 벌었습니다.\n",random);
 		return random;
 	case DOCTOR:
 		random = rand() % 1200 / 10 * 10 + 150;
-		printf("연봉을 받아서 %dG를 벌었습니다.\n",random);
+		if (nobility == 1)
+		{
+			random * 2;
+		}
+		printf("사람을 치료하고 대금을 받아서 %dG를 벌었습니다.\n",random);
 		return random;
 	case ADMIN:
 		random = rand() % 1300 / 10 * 10 + 200;
+		if (nobility == 1)
+		{
+			random * 2;
+		}
 		printf("연봉을 받아서 %dG를 벌었습니다.\n",random);
 		return random;
 	case PRIEST:
 		random = rand() % 1500 / 10 * 10 + 250;
+		if (nobility == 1)
+		{
+			random * 2;
+		}
 		printf("성금을 받아서 %dG를 벌었습니다.\n",random);
+		return random;
+	case BANKER:
+		random = rand() % 2000 / 10 * 10 + 300;
+		if (nobility == 1)
+		{
+			random * 2;
+		}
+		printf("연봉으로 %dG를 벌었습니다.\n", random);
+		return random;
+	case MERCH:
+		random = rand() % 2500 / 10 * 10 + 350;
+		if (nobility == 1)
+		{
+			random * 2;
+		}
+		printf("연봉으로 %dG를 벌었습니다.\n", random);
 		return random;
 	}
 	return 0;
 }
+
+/*void inputJob(person* person)
+{
+	int temp = 0;
+	int tempJob = 0;
+	temp = person->scholar;
+	srand((unsigned int)time(NULL));
+	do
+	{
+		tempJob = rand() % 8;
+	} while (tempJob == 0);
+	person->job = tempJob;
+	return;
+}*/
 
 int main()
 {
@@ -618,7 +690,7 @@ int main()
 	int honor = 0;
 	char firstName[10] = { '\0', };
 
-	city cityList[15];
+	city cityList[15] = { '\0', };
 	strcpy(cityList[0].name, "런던");
 	strcpy(cityList[1].name, "브뤼헤");
 	strcpy(cityList[2].name, "파리");
@@ -644,7 +716,7 @@ int main()
 
 	artist artistList[1000] = { '\0', }; //'\0' 사람 존재 X 의미 , 배열 0이 첫번째 사람
 	int personindex = 0; // 사람 정할때 personindex 사용하기 (함수 투입용,배열 숫자 변수화)
-	int order = 0; // 명령 종류 정하기. 어떤 종류가 있지?
+	int order = 0; // 명령 종류 정하기.
 	char answer = 0;
 
 	//주인공 셋팅
@@ -666,7 +738,6 @@ int main()
 	city num = { '\0', };
 	int cityindex = 0; // 도시 매치 시켜야됨 (함수 투입용,배열 숫자 변수화)
 	//build(&num,cityindex);
-	//18세 됐어 직업 or 대학 => 대학선택 => 학문 골라 => 의학 => 수련 연도랜덤인데 만약 12년걸렷어 => 12년됐어 => 그럼 50프로로 의사 나머지 확률로 나머지 직업 확률
 	scholarSelect(&personList[0].scholar,&personList[0].job); // 첫인물 학문선택 scholarSelect(&person[personindex].scholar)
 	printf("\n");
 	personList[0].age = 20;
@@ -675,11 +746,48 @@ int main()
 	personList[0].maxExp = 0;
 	personList[0].AP = 1;
 	personList[0].work = 0;
+	int tempCity = 0;
 	
 
 	//본게임시작
 	while (true) // << 게임 무한루프
 	{
+		printMap(year, money, honor);
+		if (year > 1200)
+		{
+			int temp = 0;
+			for (int index = 0; index < 15; index++)
+			{
+				if (cityList[index].building[2] == 1)
+				{
+					temp += 200;
+				}
+			}
+			printf("올해 은행 수입은 %dG입니다.\n", temp);
+			money += temp;
+		}
+
+		showPersonList(personList, maxPerson, firstName, 0);
+		for (int index = 0; index < maxPerson; index++)
+		{
+
+			switch (personList[index].work)
+			{
+				case 0:
+					break;
+				case 1:
+					searching(personList[index].city, &searchList[maxPerson]);
+					maxSearchPerson += 1;
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+			}
+		}
+
+		int recruitCheck = 0;
+		
 		int loop = 1;
 		for (int index = 0; index < maxPerson; index++) //AP 초기화
 		{
@@ -695,42 +803,18 @@ int main()
 			}
 		}
 
-		//지도 출력이 있어야될듯
-		//메뉴 출력이 처음
-		printMap(year, money, honor);
-		showPersonList(personList, maxPerson, firstName);
-
-		
-
 		//2단계. 플레이어의 행동 결정
-		while (true) //1번 루프가 하루동안 일어나는 일 루프고<< date 안쓰려고 그냥 박은거
+		while (true) //1번 루프가 하루동안 일어나는 일 루프
 		{
 			printf("현재 %d년 입니다.\n", year);//여기 년도 적기
 			fflush(stdin);
 			
-			//1단계. 전날 있었던 일들에 대한 설명
-			for (int index = 0; index < maxPerson; index++)
-			{
-
-				switch (personList[index].work)
-				{
-					case 0:
-						break;
-					case 1:
-
-						searching(personList[index].city, &searchList[maxPerson]);
-						maxSearchPerson += 1;
-						break;
-					case 2:
-						;
-					case 3:
-						;
-				}
-			}
 			while (true)
 			{
 				int menuselect = 0;
-				printf("1.인물 행동 시키기\n2.인물목록 보기\n3.건물짓기\n4.턴 넘기기: ");
+				int searchselect = 0;
+				
+				printf("1.인물 행동 시키기\n2.인물목록 보기\n3.조사한 인물목록 보기\n4.건물짓기\n5. 조사한 인물 영입하기\n5.턴 넘기기: ");
 				scanf("%d", &menuselect);
 				fflush(stdin);
 				if (menuselect == 1)
@@ -742,12 +826,21 @@ int main()
 					{
 						break;
 					}
-					if (personList[personindex - 1].AP != 1)
+					else;
+					if (personindex > maxPerson)
 					{
-						printf("이미 행동을 한 인물입니다.\n");
+						printf("존재하지 않는 인물입니다.");
 						continue;
 					}
-					printf("원하는 행동을 입력해주세요.\n1.도시이동\n2.도시 인물 조사\n3.돈벌기\n4.대학입학\n5.예술가후원\n6.학문\n"); //현재 하는 활동. 0. 명령 대기 1. 도시조사 2. 돈벌기 3. 학문쌓기(대학교가 있을 때만)
+					else
+					{
+						if (personList[personindex - 1].AP != 1)
+						{
+							printf("이미 행동을 한 인물입니다.\n");
+							continue;
+						}
+					}
+					printf("원하는 행동을 입력해주세요.\n1.도시이동\n2.도시 인물 조사\n3.돈벌기\n4.대학입학\n5.예술가후원\n"); //현재 하는 활동. 0. 명령 대기 1. 도시조사 2. 돈벌기 3. 학문쌓기(대학교가 있을 때만)
 					scanf("%d", &order);
 					fflush(stdin);
 					switch (order) //명령 함수들 여기다가 넣기
@@ -756,52 +849,107 @@ int main()
 						movePeople(&personList[personindex - 1].city); //함수에 printf 이미 있음
 						break;
 					case 2:
-						printf("%d번 인물이 도시에 있는 인물을 조사하기 시작했습니다.\n", personindex); // 조사 함수 안넣음
-						personList[personindex - 1].work = 1;
-						break;
-					case 3:
-						printf("%d번 인물이 돈벌이를 시작했습니다.\n", personindex);
-						money += revenue(&personList[personindex - 1].job);
-						//현재 위치한 건물. 0번은 명령 대기 2. 대학교 3. 은행 4. 성당 5. 미술관
-						personList[personindex - 1].work = 2;
-						break;
-					case 4:
-						if (money >= 250)
+						if(personList[personindex - 1].city != 0)
 						{
-							printf("대학 등록금은 250G입니다. %d번 인물을 대학에 입학시키겠습니까? (Y/N) : ", personindex);
-							scanf("%c", &answer);
-							if (answer == "Y")
-							{
-								printf("%d번 인물이 대학에 입학했습니다.\n", personindex);
-								money -= 250;
-								personList[personindex - 1].work = 3;
-							}
-							
+							printf("%d번 인물이 도시에 있는 인물을 조사하기 시작했습니다.\n", personindex); // 조사 함수 안넣음
+							personList[personindex - 1].work = 1;
+							personList[personindex - 1].AP = 0;
 						}
 						else
 						{
-							printf("대학 등록금이 부족합니다.");
+							printf("해당 인물은 도시에 있지 않습니다.\n");
 						}
 						
+						break;
+					case 3:
+						if(personList[personindex - 1].city != 0)
+						{
+							printf("%d번 인물이 돈벌이를 시작했습니다.\n", personindex);
+							money += revenue(personList[personindex - 1].job, personList[personindex - 1].status);
+							//현재 위치한 건물. 0번은 명령 대기 2. 대학교 3. 은행 4. 성당 5. 미술관
+							personList[personindex - 1].work = 2;
+							personList[personindex - 1].AP = 0;
+						}
+						else
+						{
+							printf("해당 인물은 도시에 있지 않습니다.\n");
+						}
+						
+						break;
+					case 4:
+						tempCity = personList[personindex - 1].city;
+						if (cityList[tempCity].building[1] == 1)
+						{
+							if (money >= 250)
+							{
+								printf("대학 등록금은 250G입니다. %d번 인물을 대학에 입학시키겠습니까? (Y/N) : ", personindex);
+								scanf("%c", &answer);
+								if (answer == "Y")
+								{
+									printf("%d번 인물이 대학에 입학했습니다.\n", personindex);
+									money -= 250;
+									personList[personindex - 1].work = 3;
+									personList[personindex - 1].AP = 0;
+								}
+
+							}
+							else
+							{
+								printf("대학 등록금이 부족합니다.\n");
+							}
+						}
+						else
+						{
+							printf("현 도시에 대학이 존재하지 않습니다.\n");
+						}
 					case 5:
+						
 						break;
 						// 1번도시이동 2번도시조사 3번도시배치(돈벌기) 4번가문관련(결혼같은거) 5번예술가후원관련 6번학문
+					case 6:
+						continue;
 					default:
 						break;
 					}
-					personList[personindex - 1].AP = 0;
+					
 				}
-				else if (menuselect == 2) // 꼽사리
+				else if (menuselect == 2) // 인물목록
 				{
-					showPersonList(personList, maxPerson, firstName);
+					showPersonList(personList, maxPerson, firstName, 0);
 					continue;
 				}
-				else if (menuselect == 3)
+				else if (menuselect == 3) // 조사한 인물 목록
+				{
+					showPersonList(searchList, maxPerson, firstName, 1);
+					continue;
+				}
+				else if (menuselect == 4) // 도시건설
 				{
 					build(&cityList, cityindex, &money, &honor);
 					continue;
 				}
-				else if (menuselect == 4)//오류
+				else if (menuselect == 5)//인물 영입하기. (영입 완료) 딱지가 붙으면 영입이 안 되도록.
+				{
+					while(1)
+					{
+						if(recruitCheck == 0)
+						{
+							printf("영입을 원하는 인물을 선택하세요.");
+							scanf("%d", searchselect);
+
+							if(strchr(searchList[searchselect - 1], "(영입 완료)") == '\0')
+							personList[maxPerson] = searchList[searchselect - 1];
+							printf("%s이(가) 우리 가문에 영입되었습니다.", searchList[searchselect - 1].name);
+							strcat(searchList[searchselect - 1].name, "(영입 완료)");
+							recruitCheck == 1;
+						}
+						else
+							printf("이번 턴에 이미 영입을 했습니다.");
+							break;
+					}
+					continue;
+				}
+				else if (menuselect == 6)//턴넘기기
 				{
 					loop = 0;
 					break;
@@ -813,7 +961,7 @@ int main()
 				break;
 			}
 		}
-		if (honor >= 100)//break 되면 여기 실행
+		if (honor >= 100) //break 되면 여기 실행
 		{
 			break;
 		}
@@ -824,24 +972,16 @@ int main()
 	
 	return 0;
 }
-// 예술사 급하면 1명씩만 작동하게 만들기
-// 각 건물들 능력 부여해줘야함 이거는 그때그때 판별하면 될듯? 명령어에 달아두자
-// 인물조사 기능(사람 턴도 쓰고)
-// 인물 목록 키면 인물 이름 옆에 O나 X 적어줘서 그턴에 활동 했는지 않했는지 알수있게 
-// 가문인물들 태어나면 이름짓고 나이 먹어감 18살에 대학or직업 선택 대학이면 돈쓰고 좋은 직업 랜덤으로 걸릴 확률 개방
-// 가문인물들 대학배치
-// 가문인물들 은행 열리면 은행가 직업 열어주고
-// 건물 짓는데 건물 비용 << 이거 생각해야되고 여차저차 돈벌었으면 명성 올리기(예술가 후원)
+
+// 돈쓰고 명성 올리기(예술가 후원)
 // 돈을 벌어서 예술가 후원하고 가문대학에 꽂아주고(교육) 영입하고 마 다해야지 
-// 예술가는 해당 년도에 해당 도시에 출현함
-// 다른 명성 높은 왕이나 교황이나 가문이랑 경쟁 가능하도록 => 교황의 명성을 100으로 기준할래, 프랑스왕90, 나폴리왕80, 영국왕70, 아라곤왕60, 밀라노공작50, 브뤼헤백작40
+// 예술가는 해당 년도에 해당 도시에 출현함 => 돈박아서 영입경쟁
+// 
+// 교황의 명성을 100으로 기준할래, 프랑스왕90, 나폴리왕80, 영국왕70, 아라곤왕60, 밀라노공작50, 브뤼헤백작40
 
-// 인물 조사 후->인물 중에 그새끼 하나 골라서 플레이가 한턴 써서 청혼 가능 확률임 명성에 비례해
-// 청혼후 출산 허용 선택임(단어는 그떄가서 바까보고) 출산은 그 가문인물 턴을 사용함 그동안 돈 못 벎 근데 사실 배치 해제 하고 가능한거라 굳이 말안해도 되겠다 
-// 인물 상태가 뭐냐라고 생각하면 편함 이게 출산 인지 업무인지 배치 인지 이동인지 하나 골라 이거임
-// 이혼 기능 추가 좀여 이건 플레이어인물 턴과 해당 인믈 턴 소모함 
+// 인물 조사 후->인물 중에 그새끼 하나 골라서 플레이가 한턴 써서 영입 가능 확률임 명성에 비례해
 
-// 예쑬가들이 작품 만들도록 해야함(이거 메커니즘 한번 쫙 설명해주라 아님 기획서에 있나) => 작품 나올 시간대에 가장 후원 많이한사람
+// 예쑬가들이 작품 만들도록 해야함 => 예술가를 영입하면 작품 해당 연도에 예술품을 만듬
 /*
 [4. 직업 돈] 만약 귀족이면 해당 직업에서 얻는 돈 2배(직업(숫자는 턴골)ㅜㅜ
 	성직자13, 행행정관12, 의사11, 은행가10, 상인9, 대장장이8, 제빵사7, 
