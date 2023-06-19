@@ -191,11 +191,9 @@ void build(city* city, int cityindex,int* money, int* honor)//아아 ㅇㅋ
 		while (1)
 		{
 			char select = 0;
-			fflush(stdin);
 			printf("1.대학교 2.은행 3.성당 4.미술관 5.취소\n");//지워지워 다 지워버려 그냥 다 지워ㅓㅓㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
 			printf("지을 건물을 선택해주세요 (숫자): ");
 			scanf("%d", &buildSelect);
-			fflush(stdin);
 			if (buildSelect != 5)
 			{
 				if (city[cityindex].building[buildSelect] == 0)
@@ -203,11 +201,12 @@ void build(city* city, int cityindex,int* money, int* honor)//아아 ㅇㅋ
 					switch(buildSelect)
 					{
 					case 1:
-						printf("대학교를 지을려면 1000G가 필요합니다. 지으시겠습니까? (Y/N)");
+						printf("대학교를 지을려면 10000G가 필요합니다. 지으시겠습니까? (Y/N)");
+			
 						scanf(" %c", select);
 						if (select == 'Y')
 						{
-							if (*money > 1000)
+							if (*money > 10000)
 							{
 								city[cityindex].building[buildSelect] = 1;
 								*honor += 1;
@@ -225,11 +224,11 @@ void build(city* city, int cityindex,int* money, int* honor)//아아 ㅇㅋ
 							continue;
 						}
 					case 2:
-						printf("은행을 지을려면 1500G가 필요합니다. 지으시겠습니까? (Y/N)");
+						printf("은행을 지을려면 15000G가 필요합니다. 지으시겠습니까? (Y/N)");
 						scanf(" %c", select);
 						if (select == 'Y')
 						{
-							if (*money > 1500)
+							if (*money > 15000)
 							{
 								city[cityindex].building[buildSelect] = 1;
 								*honor += 1;
@@ -247,11 +246,11 @@ void build(city* city, int cityindex,int* money, int* honor)//아아 ㅇㅋ
 							continue;
 						}
 					case 3:
-						printf("성당을 지을려면 2000G가 필요합니다. 지으시겠습니까? (Y/N)");
+						printf("성당을 지을려면 20000G가 필요합니다. 지으시겠습니까? (Y/N)");
 						scanf(" %c", select);
 						if (select == 'Y')
 						{
-							if (*money > 2000)
+							if (*money > 20000)
 							{
 								city[cityindex].building[buildSelect] = 1;
 								*honor += 2;
@@ -269,11 +268,11 @@ void build(city* city, int cityindex,int* money, int* honor)//아아 ㅇㅋ
 							continue;
 						}
 					case 4:
-						printf("미술관을 지을려면 1500G가 필요합니다. 지으시겠습니까? (Y/N)");
+						printf("미술관을 지을려면 15000G가 필요합니다. 지으시겠습니까? (Y/N)");
 						scanf(" %c", select);
 						if (select == 'Y')
 						{
-							if (*money > 1500)
+							if (*money > 15000)
 							{
 								city[cityindex].building[buildSelect] = 1;
 								*honor += 2;
@@ -814,7 +813,7 @@ int main()
 				int menuselect = 0;
 				int searchselect = 0;
 				
-				printf("1.인물 행동 시키기\n2.인물목록 보기\n3.조사한 인물목록 보기\n4.건물짓기\n5. 조사한 인물 영입하기\n5.턴 넘기기: ");
+				printf("1.인물 행동 시키기\n2.인물목록 보기\n3.조사한 인물목록 보기\n4.건물짓기\n5. 조사한 인물 영입하기\n6.턴 넘기기: ");
 				scanf("%d", &menuselect);
 				fflush(stdin);
 				if (menuselect == 1)
@@ -840,6 +839,7 @@ int main()
 							continue;
 						}
 					}
+					printf("%s", personList[personindex - 1].name);
 					printf("원하는 행동을 입력해주세요.\n1.도시이동\n2.도시 인물 조사\n3.돈벌기\n4.대학입학\n5.예술가후원\n"); //현재 하는 활동. 0. 명령 대기 1. 도시조사 2. 돈벌기 3. 학문쌓기(대학교가 있을 때만)
 					scanf("%d", &order);
 					fflush(stdin);
@@ -932,19 +932,33 @@ int main()
 				{
 					while(1)
 					{
-						if(recruitCheck == 0)
+						if (recruitCheck == 0)
 						{
-							printf("영입을 원하는 인물을 선택하세요.");
+							printf("영입을 원하는 인물을 선택하세요.\n");
 							scanf("%d", searchselect);
 
-							if(strchr(searchList[searchselect - 1], "(영입 완료)") == '\0')
-							personList[maxPerson] = searchList[searchselect - 1];
-							printf("%s이(가) 우리 가문에 영입되었습니다.", searchList[searchselect - 1].name);
-							strcat(searchList[searchselect - 1].name, "(영입 완료)");
-							recruitCheck == 1;
+							if (searchselect < maxSearchPerson)
+							{
+								if (strchr(searchList[searchselect - 1].name, "(영입 완료)") == NULL)
+								{
+									personList[maxPerson] = searchList[searchselect - 1]; // 일일이 복사 해야되나?
+									printf("%s이(가) 우리 가문에 영입되었습니다.\n", searchList[searchselect - 1].name);
+									strcat(searchList[searchselect - 1].name, "(영입 완료)");
+									recruitCheck == 1;
+								}
+								else
+								{
+									printf("이미 영입한 인물입니다.\n");
+								}
+							}
+							else
+							{
+								printf("존재하지 않는 인물입니다.\n");
+							}
+							
 						}
 						else
-							printf("이번 턴에 이미 영입을 했습니다.");
+							printf("이번 턴에 이미 영입을 했습니다.\n");
 							break;
 					}
 					continue;
@@ -973,17 +987,11 @@ int main()
 	return 0;
 }
 
+// 조사한 인물 이름 안나옴
 // 돈쓰고 명성 올리기(예술가 후원)
-// 돈을 벌어서 예술가 후원하고 가문대학에 꽂아주고(교육) 영입하고 마 다해야지 
+// 돈을 벌어서 예술가 후원하고 영입하고
 // 예술가는 해당 년도에 해당 도시에 출현함 => 돈박아서 영입경쟁
+// 인물 조사 후->인물 중에 그새끼 하나 골라서 플레이어가 한턴 써서 영입 가능 확률임 (명성에 비례해)
+// 예쑬가들이 작품 만들도록 해야함 => 예술가를 영입하면 작품 해당 연도에 예술품을 만듬
 // 
 // 교황의 명성을 100으로 기준할래, 프랑스왕90, 나폴리왕80, 영국왕70, 아라곤왕60, 밀라노공작50, 브뤼헤백작40
-
-// 인물 조사 후->인물 중에 그새끼 하나 골라서 플레이가 한턴 써서 영입 가능 확률임 명성에 비례해
-
-// 예쑬가들이 작품 만들도록 해야함 => 예술가를 영입하면 작품 해당 연도에 예술품을 만듬
-/*
-[4. 직업 돈] 만약 귀족이면 해당 직업에서 얻는 돈 2배(직업(숫자는 턴골)ㅜㅜ
-	성직자13, 행행정관12, 의사11, 은행가10, 상인9, 대장장이8, 제빵사7, 
-	재단사6, 도축업자5, 사냥꾼4, 무두장이3, 숯꾼2, 농민1, 백수0
-	*/
