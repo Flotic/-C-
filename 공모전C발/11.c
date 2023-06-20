@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <time.h>
-#pragma warning(disable:4996) //옛날 함수 경고 없이 사용
+#pragma warning(disable:4996) //옛날 함수 경고 없이 사용 
 
 /* -------------------------------------- 열거형 ---------------------------------------------- */
 
