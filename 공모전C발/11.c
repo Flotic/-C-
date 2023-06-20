@@ -23,12 +23,9 @@ typedef enum _arttype {} artType; //예술품종류
 
 typedef struct _city //도시 정보
 {
-	char name[10]; //도시 이름 <<< 도시 배열 숫자에 도시 매치 해야될듯
+	char name[10]; //도시 이름
 	int popularity; //인구수 
 	int building[5]; //지어진 건물.  1. 대학교 2. 은행 3. 성당 4. 미술관
-
-	// <<< 그 도시에 0과1로 지어졌냐 안졌냐를 확인해야함, 
-	// <<< 밑에 주성이가 만드는 건물 건설 함수랑 연계 필요               흠
 
 	int workman[99]; //들어간 사람(인덱스로 구분)
 	politicalSystem politic; //정치체제(열거형으로 구분)
@@ -203,7 +200,7 @@ void build(city* city, int cityindex,int* money, int* honor)//아아 ㅇㅋ
 					case 1:
 						printf("대학교를 지을려면 10000G가 필요합니다. 지으시겠습니까? (Y/N)");
 			
-						scanf(" %c", select);
+						scanf(" %c", &select);
 						if (select == 'Y')
 						{
 							if (*money > 10000)
@@ -336,7 +333,41 @@ void searching(int searchCity, person* newFace)
 	person newPerson;
 	int random;
 	char select;
-	char nameList[5][20] = {"Alessandro","Aurora","Marco","Sofia","Lorenzo"};
+	char nameList[300][30] = { "Alessandro", "Aurora", "Marco", "Sofia", "Lorenzo",
+	"Valentina", "Matteo", "Giorgia", "Andrea", "Chiara", "Francesco",
+	"Beatrice", "Davide", "Martina", "Giuseppe", "Alice", "Leonardo",
+	"Aurora", "Filippo", "Laura", "Mattia", "Sara", "Simone", "Giulia",
+	"Gabriele", "Valeria", "Luca", "Giulia", "Mattia", "Elena", "Giacomo",
+	"Aurora", "Alessandro", "Martina", "Riccardo", "Caterina", "Giovanni",
+	"Maria", "Alessandro", "Elena", "Pietro", "Chiara", "Francesco", "Sofia",
+	"Luca", "Laura", "Matteo", "Valentina", "Marco", "Aurora", "Giuseppe", "Alice",
+	"Andrea", "Sofia", "Leonardo", "Martina", "Lorenzo", "Beatrice", "Davide", "Giulia",
+	"Alessandro", "Emma", "Gabriele", "Valeria", "Simone", "Francesca", "Filippo", "Laura",
+	"Matteo", "Sara", "Giovanni", "Sofia", "Marco", "Martina", "Alessia", "Francesco",
+	"Aurora", "Leonardo", "Chiara", "Andrea", "Valentina", "Matteo", "Emma", "Lorenzo",
+	"Beatrice", "Davide", "Giorgia", "Alessandro", "Sara", "Simone", "Giulia", "Gabriele",
+	"Martina", "Matteo", "Valentina", "Francesco", "Aurora", "Luca", "Chiara", "Andrea",
+	"Sofia", "Giovanni", "Francesca", "Lorenzo", "Beatrice", "Davide", "Valentina", "Matteo",
+	"Emma", "Alessandro", "Sara", "Simone", "Giulia", "Gabriele", "Martina", "Francesco",
+	"Aurora", "Luca", "Chiara", "Andrea", "Sofia", "Giovanni", "Francesca", "Lorenzo",
+	"Beatrice", "Davide", "Valentina", "Matteo", "Emma", "Alessandro", "Sara", "Simone",
+	"Giulia", "Gabriele", "Martina", "Francesco", "Aurora", "Luca", "Chiara", "Andrea",
+	"Sofia", "Giovanni", "Francesca", "Lorenzo", "Beatrice", "Davide", "Valentina", "Matteo",
+	"Emma", "Alessandro", "Sara", "Simone", "Giulia", "Gabriele", "Martina", "Francesco",
+	"Aurora", "Luca", "Chiara", "Andrea", "Sofia", "Giovanni", "Francesca", "Lorenzo",
+	"Beatrice", "Davide", "Valentina", "Matteo", "Emma", "Alessandro", "Sara", "Simone",
+	"Giulia", "Gabriele", "Martina", "Francesco", "Aurora", "Luca", "Chiara", "Andrea",
+	"Sofia", "Giovanni", "Francesca", "Lorenzo", "Beatrice", "Davide", "Valentina",
+	"Matteo", "Emma", "Alessandro", "Sara", "Simone", "Giulia", "Gabriele", "Martina",
+	"Francesco", "Aurora", "Luca", "Chiara", "Andrea", "Sofia", "Giovanni", "Francesca",
+	"Lorenzo", "Beatrice", "Davide", "Valentina", "Matteo", "Emma", "Alessandro", "Sara",
+	"Simone", "Giulia", "Gabriele", "Martina", "Francesco", "Aurora", "Luca", "Chiara",
+	"Andrea", "Sofia", "Giovanni", "Francesca", "Lorenzo", "Beatrice", "Davide",
+	"Valentina", "Matteo", "Emma", "Alessandro", "Sara", "Simone", "Giulia", "Gabriele",
+	"Martina", "Francesco", "Aurora", "Luca", "Chiara", "Andrea", "Sofia", "Giovanni",
+	"Francesca", "Lorenzo", "Beatrice", "Davide", "Valentina", "Matteo", "Emma",
+	"Alessandro", "Sara", "Simone", "Giulia", "Gabriele", "Martina", "Francesco",
+	"Aurora", "Luca", "Chiara", "Andrea" };
 
 	printf("%d번 도시에서 새로운 인물을 찾았습니다!\n", searchCity);
 
@@ -987,11 +1018,160 @@ int main()
 	return 0;
 }
 
-// 조사한 인물 이름 안나옴
+/*
+typedef struct _artist //예술가 정보
+{
+	char name[20]; //이름
+	int startYear;
+	int endYear;
+	int paintYearA;
+	int paintYearB;
+	char 
+	char 
+	int city;
+
+	예술가가 생성될 도시, 연도 그리고 죽을 연도, 작품 2개 남길 연도
+} artist; //인물 구별 하려면 배열 숫자에 의미부여
+*/
+
+// 조사한 인물 이름 안나옴(이거 될걸)
+
 // 돈쓰고 명성 올리기(예술가 후원)
 // 돈을 벌어서 예술가 후원하고 영입하고
-// 예술가는 해당 년도에 해당 도시에 출현함 => 돈박아서 영입경쟁
+// 예술가는 해당 년도에 해당 도시에 출현함? => 돈박아서 영입경쟁
 // 인물 조사 후->인물 중에 그새끼 하나 골라서 플레이어가 한턴 써서 영입 가능 확률임 (명성에 비례해)
-// 예쑬가들이 작품 만들도록 해야함 => 예술가를 영입하면 작품 해당 연도에 예술품을 만듬
-// 
+// 예술가들이 작품 만들도록 해야함 => 예술가를 영입하면 작품 해당 연도에 예술품을 만듬
 // 교황의 명성을 100으로 기준할래, 프랑스왕90, 나폴리왕80, 영국왕70, 아라곤왕60, 밀라노공작50, 브뤼헤백작40
+
+/*
+<예술가 명단>
+《》 => 작품명, [] => 예술가명, () => 생성연도, 도시명 => 예술가가 생성되는 도시
+
+1.[마사치오](1401~1428) 피렌체
+《성 삼위일체》(1425~1428)
+《성전세》(1425)
+
+artist artistList[31] = {{"산드로 보티첼리", 1445, 1510, 1482, 1486, 11,}}
+임주성 바보
+
+2.[산드로 보티첼리](1445~1510) 피렌체
+《봄》(1482)
+《비너스의 탄생》(1486)
+
+3.[레오나르도 다 빈치](1452~1519) 피렌체
+《모나리자》(1503~1506)
+《최후의 만찬》(1495~1498)
+
+4.[미켈란젤로 부오나로티](1475~1564) 피렌체
+《천지 창조》(1482)
+《다비드》(1501~1504)
+
+5.[조르조네](1478~1510) 베네치아
+《폭풍》(1508)
+《잠자는 비너스》(1510)
+
+6.[티치아노 베첼리오](1490~1576) 베네치아
+《우르비노 비너스》(1538)
+《피에타》(1576)
+
+7.[라파엘로](1483~1520) 안코나
+《아테네 학당》(1509~1510)
+《그리소도의 변용》(1518~1520)
+
+8.[한스 홀바인](1497~1543) 바젤
+《대사들》(1533)
+《헨리 8세의 초상화》(1537)
+
+9.[알브레히트 뒤러](1471~1528) 바젤
+《모피 코트를 입은 자화상》(1500)
+《기도하는 손》(1508)
+
+10.[히에로니무스 보스](1450~1516) 브뤼헤
+《세속적인 쾌락의 동산》(1490~1510)
+《일곱 가지 대죄와 네 가지 종말》(1500)
+
+11.[피터르 브뤼헐 더 아우더](1527~1569) 브뤼헤
+《네덜란드 속담》(1559)
+《농가의 혼례》(1568)
+
+12.[엘 그레코](1541~1614) 바르셀로나
+《오르가스 백작의 매장》(1586~1588)
+《톨레도 풍경》(1597~1599)
+
+13.[미켈란젤로 메리시 다 카라바조](1571~1610) 밀라노
+《홀로페르네스의 목을 베는 유딧》(1598 - 1599)
+《골리앗의 머리를 들고 있는 다윗》(1609~1610)
+
+14.[페테르 파울 루벤스](1577~1640) 제노바
+《십자가를 세움》(1610`1611)
+《하마와 악어 사냥》(1615~1616)
+
+15.[렘브란트 하르먼손 반 레인](1606~1669) 브뤼헤
+《갈릴래아 호수의 폭풍과 그리스도》(1633)
+《야경》(1642)
+
+16.[아르테미시아 젠틸레스키](1596~1652) 로마
+《수산나와 두 장로》(1593~1642)
+《유디트와 하녀》(1613~1614)
+
+17.[디에고 벨라스케스](1599~1660) 바르셀로나
+《브레다 성의 항복》(1635)
+《시녀들》(1656)
+
+18.[장바티스트시메옹 샤르댕](1699~1779) 파리
+《붉은 가오리》(1728)
+《아침 기도》(1735)
+
+19.[앙투안 바토](1684~1721) 파리
+《키테라 섬으로의 출항》(1717)
+《파리스의 심판》(1718~1721)
+
+20.[장프랑수아 밀레](1814~1875) 파리
+《이삭 줍는 여인》(1857)
+《만종》(1859)
+
+21.[폴 세잔](1839~1906) 리옹
+《붉은 조끼를 입은 소년》(1889)
+《사과와 오렌지》(1900)
+
+
+22.[폴 고갱](1848~1903) 파리
+《타히티의 여인들》(1891)
+《우리는 어디에서 왔는가? 우리는 누구인가? 우리는 어디로 가는가?》(1898)
+
+23.[빈센트 반 고흐](1853~1890) 브뤼헤
+《별이 빛나는 밤》(1889)
+《해바라기》(1889)
+
+24.[에두아르 마네](1814~1875) 파리
+《풀밭 위의 점심 식사》(1863)
+《피리 부는 소년》(1866)
+
+25.[클로드 모네](1840~1926) 파리
+《인상, 해돋이》(1872)
+《수련》(1920~1926)
+
+26.[앙리 마티스](1869~1954) 리옹
+《루마니아 풍의 블라우스를 입은 여인》(1940)
+《이카루스》(1944)
+
+27.[바실리 칸딘스키](1866~1944) 리옹
+《구성 Ⅶ》(1913)
+《원 속의 원》(1923)
+
+28.[에드바르드 뭉크](1863~1944) 제네바
+《절규》(1893)
+《불안》(1896)
+
+29.[파블로 피카소](1814~1875) 바르셀로나
+《아비뇽 처녀들》(1907)
+《게르니카》(1937)
+
+30.[마르셀 뒤샹](1887~1968) 리옹
+《계단을 내려오는 누드》(1912)
+《샘》(1917)
+
+31.[살바도르 달리](1904~1989) 바르셀로나
+《기억의 지속》(1931)
+《네로의 코 주위의 탈물질화》(1947)
+*/
